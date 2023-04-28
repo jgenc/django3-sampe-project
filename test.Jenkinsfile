@@ -25,7 +25,7 @@ pipeline {
       stage("Deploy Database") {
         steps {
           sh '''
-            ansible-galaxy install geerlingguy.jenkins.java
+            ansible-galaxy install geerlingguy.jenkins
           '''
 
           sh '''

@@ -30,7 +30,7 @@ pipeline {
           '''
 
           sh '''
-            ansible-playbook ~/workspace/ansible-project/playbooks/postgres.yml
+            ansible-playbook -i ~/workspace/ansilbe-project/hosts.yml -l db01  ~/workspace/ansible-project/playbooks/postgres.yml
           '''
         }
       }

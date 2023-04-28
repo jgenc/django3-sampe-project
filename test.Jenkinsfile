@@ -22,6 +22,18 @@ pipeline {
         }
       }
 
+      stage("Deploy Database") {
+        steps {
+          sh '''
+            ansible-galaxy install geerlingguy.jenkins.java
+          '''
+
+          sh '''
+            ansible-playbook ~/workspace/ansible-project/playbooks/postgres.yml
+          '''
+        }
+      }
+
 
   }
 }

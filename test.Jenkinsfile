@@ -26,6 +26,7 @@ pipeline {
         steps {
           sh '''
             ansible-galaxy install geerlingguy.jenkins
+            ansible-galaxy install geerlingguy.postgresql
           '''
 
           sh '''

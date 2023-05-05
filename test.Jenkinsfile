@@ -52,6 +52,13 @@ pipeline {
         }
       }
 
+    stage("Check if site is public") {
+      steps {
+        sh '''
+          curl localhost
+        '''
+      }
+    }
 
   }
 }

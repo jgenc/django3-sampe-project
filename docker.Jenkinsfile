@@ -35,7 +35,7 @@ pipeline {
             TAG=$HEAD_COMMIT-$BUILD_ID
             docker build --rm -t $DOCKER_PREFIX:$TAG -t $DOCKER_PREFIX:latest -f nonroot-alpine.Dockerfile .
             echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-            dokcer push $DOCKER_PREFIX --all-tags
+            docker push $DOCKER_PREFIX --all-tags
           '''
         }
       }

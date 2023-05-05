@@ -10,7 +10,9 @@ pipeline {
 
     stages {
       stage("Clone") {
-        git branch: 'main', url : 'git@github.com:jgenc/django3-sampe-project.git'
+        steps {
+          git branch: 'main', url : 'git@github.com:jgenc/django3-sampe-project.git'
+        }
       }
       
       stage("Test") {

@@ -30,7 +30,7 @@ pipeline {
           '''
 
           sh '''
-            ansible-playbook -i ~/workspace/ansible-project/hosts.yml -l db01  ~/workspace/ansible-project/playbooks/postgres.yml
+            ansible-playbook -i ~/workspace/ansible-project/hosts.yml -l deploy-vm-1 ~/workspace/ansible-project/playbooks/postgres.yml
           '''
         }
       }
@@ -38,7 +38,7 @@ pipeline {
       stage("Deploy Django") {
         steps {
           sh '''
-            ansible-playbook -i ~/workspace/ansible-project/hosts.yml -l app01 --extra-vars "user_dir=/home/azureuser"  ~/workspace/ansible-project/playbooks/django-project-install.yml
+            ansible-playbook -i ~/workspace/ansible-project/hosts.yml -l app01
           '''
 
           sh '''

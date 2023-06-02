@@ -6,7 +6,7 @@ pipeline {
             DOCKER_USER = 'jgenc'
             DOCKER_SERVER = 'ghcr.io'
             DOCKER_PREFIX = 'ghcr.io/jgenc/django'
-            TAG=v0.2.3-nonroot
+            TAG="v0.2.3-nonroot"
         }
 
 

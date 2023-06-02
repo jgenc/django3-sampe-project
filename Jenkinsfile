@@ -5,7 +5,7 @@ pipeline {
             DOCKER_TOKEN = credentials('docker-push-secret')
             DOCKER_USER = 'jgenc'
             DOCKER_SERVER = 'ghcr.io'
-            DOCKER_PREFIX = 'ghcr.io/jgenc/django3-sampe-project'
+            DOCKER_PREFIX = 'ghcr.io/jgenc/django'
         }
 
 
@@ -48,8 +48,6 @@ pipeline {
               '''
             }
         }
-
-        // Tag is not good.
 
         stage('Deploy to k8s') {
             steps {

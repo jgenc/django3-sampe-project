@@ -49,11 +49,13 @@ pipeline {
             }
         }
 
+        // Tag is not good.
+
         stage('Deploy to k8s') {
             steps {
                 sh '''
                     HEAD_COMMIT=$(git rev-parse --short HEAD)
-                    TAG=$HEAD_COMMIT-$BUILD_ID
+                    TAG=release
                     kubectl config use-context microk8s
                     kubectl apply -f k8s/django-test/django-pvc.yaml
                     kubectl apply -f k8s/django-test/django-pvc-static.yaml

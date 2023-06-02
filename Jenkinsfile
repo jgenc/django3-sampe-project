@@ -53,7 +53,7 @@ pipeline {
             steps {
                 sh '''
                     HEAD_COMMIT=$(git rev-parse --short HEAD)
-                    TAG=release
+                    TAG=v0.2.3-nonroot
                     kubectl config use-context microk8s
                     kubectl apply -f k8s/django-test/django-pvc.yaml
                     kubectl apply -f k8s/django-test/django-pvc-static.yaml

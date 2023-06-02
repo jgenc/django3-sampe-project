@@ -55,8 +55,12 @@ pipeline {
                     HEAD_COMMIT=$(git rev-parse --short HEAD)
                     TAG=$HEAD_COMMIT-$BUILD_ID
                     kubectl config use-context microk8s
-
-                    
+                    kubectl apply -f k8s/django-test/django-pvc.yaml
+                    kubectl apply -f k8s/django-test/django-pvc-static.yaml
+                    kubectl apply -f k8s/django-test/django-deploy.yaml
+                    kubectl apply -f k8s/django-test/django-service.yaml
+                    kubectl set image deployment/django-app django=$DOCKER_PREFIX:$TAG
+                    kubectl set image deployment/django-app djago-init=$DOCKER_PREFIX:$TAG
                 '''
             }
         }

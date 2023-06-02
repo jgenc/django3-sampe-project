@@ -6,6 +6,7 @@ pipeline {
             DOCKER_USER = 'jgenc'
             DOCKER_SERVER = 'ghcr.io'
             DOCKER_PREFIX = 'ghcr.io/jgenc/django'
+            TAG=v0.2.3-nonroot
         }
 
 
@@ -25,7 +26,7 @@ pipeline {
             sh '''
               cd myproject
               cp myproject/.env.example myproject/.env
-              docker run --env-file myproject/.env $DOCKER_PREFIX:latest python manage.py test
+              docker run --env-file myproject/.env $DOCKER_PREFIX:$TAG python manage.py test
             '''
           }
         }
@@ -53,7 +54,6 @@ pipeline {
             steps {
                 sh '''
                     HEAD_COMMIT=$(git rev-parse --short HEAD)
-                    TAG=v0.2.3-nonroot
                     kubectl config use-context microk8s
                     kubectl apply -f k8s/django-test/django-pvc.yaml
                     kubectl apply -f k8s/django-test/django-pvc-static.yaml

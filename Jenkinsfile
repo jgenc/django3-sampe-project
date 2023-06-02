@@ -60,7 +60,7 @@ pipeline {
                     kubectl apply -f k8s/django-test/django-deploy.yaml
                     kubectl apply -f k8s/django-test/django-service.yaml
                     kubectl set image deployment/django-app django=$DOCKER_PREFIX:$TAG
-                    kubectl set image deployment/django-app djago-init=$DOCKER_PREFIX:$TAG
+                    kubectl set image deployment/django-app django-init=$DOCKER_PREFIX:$TAG
                 '''
             }
         }

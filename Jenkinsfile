@@ -16,7 +16,7 @@ pipeline {
             sh '''
               cd myproject
               cp myproject/.env.example myproject/.env
-              docker run --env-file myproject/.env $DOCKER_PREFIX:latest python manage.py test
+              docker run --env-file myproject/.env $DOCKER_PREFIX:$TAG python manage.py test
             '''
           }
         }

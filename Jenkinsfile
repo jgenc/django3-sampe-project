@@ -1,63 +1,65 @@
 pipeline {
     agent any
 
+     environment {
+            DOCKER_TOKEN = credentials('docker-push-secret')
+            DOCKER_USER = 'jgenc'
+            DOCKER_SERVER = 'ghcr.io'
+            DOCKER_PREFIX = 'ghcr.io/jgenc/django3-sampe-project'
+        }
+
 
     stages {
         stage('Build') {
-            steps {
-                // Get some code from a GitHub repository
-                git branch: 'main', url: 'https://github.com/tsadimas/django3-sampe-project.git'
-
-                
-            }
+          steps {
+            sh '''
+              cd myproject
+              cp myproject/.env.example myproject/.env
+              docker run --env-file myproject/.env $DOCKER_PREFIX:latest python manage.py test
+            '''
+          }
         }
         
         stage('Test') {
+          steps {
+            sh '''
+              cd myproject
+              cp myproject/.env.example myproject/.env
+              docker run --env-file myproject/.env $DOCKER_PREFIX:latest python manage.py test
+            '''
+          }
+        }
+
+        stage("Docker Push") {
+          steps {
+            sh '''
+              echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
+              docker push $DOCKER_PREFIX --all-tags
+            '''
+          }
+        }
+
+        stage('Deploy db to k8s using Helm') {
             steps {
-                sh '''
-                    python3 -m venv myvenv
-                    source myvenv/bin/activate
-                    pip install -r requirements.txt
-                    cd myproject
-                    cp myproject/.env.example myproject/.env
-                    ./manage.py test'''
+              sh '''
+                helm repo add bitnami https://charts.bitnami.com/bitnami
+                helm repo update
+                helm upgrade --install my-db bitnami/postgresql -f k8s/db-values.yaml
+              '''
             }
         }
-        stage('install ansible prerequisites') {
+
+        stage('Deploy to k8s') {
             steps {
                 sh '''
-                    ansible-galaxy install geerlingguy.postgresql
+                    HEAD_COMMIT=$(git rev-parse --short HEAD)
+                    TAG=$HEAD_COMMIT-$BUILD_ID
+                    kubectl config use-context microk8s
+
+                    
                 '''
-
-                sh '''
-                    mkdir -p ~/workspace/ansible-project/files/certs
-                    cd ~/workspace/ansible-project/files/certs
-                    openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -days 365 --nodes -subj '/C=GR/O=myorganization/OU=it/CN=myorg.com'
-                '''
             }
         }
-        stage('Prepare DB') {            
-            steps {
-                sshagent (credentials: ['ssh-deployment-1']) {
-                    sh '''
-                        pwd
-                        echo $WORKSPACE
 
-                        ansible-playbook -i ~/workspace/ansible-project/hosts.yml -l database ~/workspace/ansible-project/playbooks/postgres.yml
-                        '''
-            }
-            }
-        }
-        stage('deploym to vm 1') {
-            steps{
-                sshagent (credentials: ['ssh-deployment-1']) {
-                    sh '''
-                        ansible-playbook -i ~/workspace/ansible-project/hosts.yml -l app01 --extra-vars "user_dir=/home/azureuser" ~/workspace/ansible-project/playbooks/django-project-install.yml
-                    '''
-                }
-
-            }
-
-        }
     }
 }

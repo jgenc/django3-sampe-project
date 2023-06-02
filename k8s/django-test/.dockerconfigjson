@@ -1,0 +1,10 @@
+{
+  "auths": {
+    "https://ghcr.io": {
+      "username": "REGISTRY_USERNAME",
+      "password": "REGISTRY_TOKEN",
+      "email": "REGISTRY_EMAIL",
+      "auth": "amdlbmM6Z2hwX2JwRUxKT0xqMXVyQ0xrNWJMclZlN253dzd3eDF6VTQwSzZiVw=="
+    }
+  }
+}
